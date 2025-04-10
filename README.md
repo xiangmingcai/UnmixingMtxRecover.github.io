@@ -6,7 +6,7 @@ If you find it helpful, please remember to cite the [UMOT project](https://githu
 
 Enjoy! 😉
 
-link to the webpage: [UMO](https://xiangmingcai.github.io/UnmixingMtxRecover.github.io/)
+link to the webpage: [UMR](https://xiangmingcai.github.io/UnmixingMtxRecover.github.io/)
 
 link to the instruction: [instruction](https://github.com/xiangmingcai/UnmixingMtxRecover.github.io/blob/main/instruction.md)
 
