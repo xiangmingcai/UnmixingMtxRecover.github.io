@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnmixingMtxGenerator</title>
+    <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+    <div class="basic-div">
+        <h1>Unmixing Matrix Recover (UMR)</h1>
+        <p>(version 1.0)</p>
+        <p>This website is designed to guide users recover the unmixing matrix for flow cytometry analysis. </p>
+        <p>With the UMR, you could recover your unmixing matrix from fcs file with both raw signal and unmixed signal.</p>
+        <p>However, keep in mind, the recovered unmixing matrix could be significantly different from the original matrix, because of rounded number and potential different unmixing matri used.</p>
+        <p>If you find this tool helpful, please remember to cite us in your work. <a href="https://github.com/xiangmingcai/UnmixingMtxRecover.github.io" target="_blank">View this project on GitHub</a></p>
+        <p>🔍<a href="https://github.com/xiangmingcai/UnmixingMtxRecover.github.io/blob/main/instruction.md" target="_blank">instruction document</a> </p>
+        <p>Enjoy! 😉</p>
+    </div>
+    <!-- Step 1 Inital setting and Import files -->
+    <!-- Select Data Folder and UnmixMatrix CSV file -->
+    <div class="basic-div">
+        <div>
+            <h2>Step 1 Setup</h2>
+            <p>Select a fcs File</p>
+            <input type="file" id="file-input" >
+            <p id="file-name" class = "small-gray-text"></p>
+            <!-- Read UnmixMatrix CSV file -->
+            <button id="read-fcs">Fetch channels in the fcs file.</button>
+            <p id="read-fcs-reminder" class = "small-gray-text"></p>
+        </div>
+    </div>
+
+    <!-- Step 2 Select raw Channels and unmixed Channels-->
+    <div class="basic-div">
+        <h2>Step 2 Select raw Channels and unmixed Channels</h2>
+        <div id="selection-div" style="display:none;">
+            <div class="selection-container">
+                <div class="list">
+                    <h3>Available Channels</h3>
+                    <select id="availableColumns" multiple></select>
+                </div>
+                <div class="list">
+                    <h3>Raw Channels (<span id="rawCount">0</span>)</h3>
+                    <select id="rawChannels" multiple></select>
+                </div>
+                <div class="list">
+                    <h3>Unmixed Channels (<span id="unmixedCount">0</span>)</h3>
+                    <select id="unmixedChannels" multiple></select>
+                </div>
+            </div>
+            <button id="moveToRaw-button">Move to Raw</button>
+            <button id="moveToUnmixed-button">Move to Unmixed</button>
+            <button id="reset-button">Reset</button>
+        </div>
+    </div>
+    
+    <!-- Step 3 Recover unmixing matrix -->
+    <div class="basic-div">
+        <h2>Step 3 Recover unmixing matrix</h2>
+        
+        <div id="recover-div" style="display:none;">
+            <button id="recover-button"> Recover now! </button>
+            <p id="recover-reminder" class = "small-gray-text"></p>
+            <div id="recover-results"></div>
+        </div>
+    </div>    
+
+    <!-- Step 4 Save Unmixing matrix -->
+    <div class="basic-div">
+        <h2>Step 4 Save Unmixing matrix </h2>
+        <div id="save-button-div" style="display: none;">
+            <button id="save-button" >Save Unmixing matrix</button>
+            <button id="export-log-button" >Save log</button>
+        </div>
+    </div>
+
+ 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <footer>
+        <p>&copy; 2025 XiangmingCai. All rights reserved.</p>
+    </footer>
+    <script src="dist/bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    
+</body>
+</html>
