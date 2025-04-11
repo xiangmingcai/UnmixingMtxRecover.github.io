@@ -1,7 +1,7 @@
 
 import FCS from '../node_modules/fcs/fcs.js';
 import Plotly from '../node_modules/plotly.js-dist';
-import { pinv,multiply,transpose,abs,sign,log10,add,dotMultiply,matrix,median,subtract,exp,sqrt,max,divide } from '../node_modules/mathjs';
+import { pinv,multiply,transpose,abs,sign,log10,add,dotMultiply,matrix,median,subtract,exp,sqrt,max,divide,ceil } from '../node_modules/mathjs';
 import seedrandom from '../node_modules/seedrandom';
 
 let fcsfileHandle;
@@ -236,8 +236,8 @@ function fetchArray() {
             fcs = null;
             for (let i = 0; i < 10; i++){
                 customLog("recover loop: ", i);
-                fcsArray = generateSubset(fcsArray_full,1000,i)
-
+                //fcsArray = generateSubset(fcsArray_full,1000,i,"getRandomSubset",unmixedChannels,fcsColumnNames)
+                fcsArray = generateSubset(fcsArray_full,1000,i,"getAllMaxSubset",unmixedChannels,fcsColumnNames)
                 // Find indices of rawChannels and unmixedChannels in fcsColumnNames
                 let rawIndices = rawChannels.map(name => fcsColumnNames.indexOf(name));
                 let unmixedIndices = unmixedChannels.map(name => fcsColumnNames.indexOf(name));
@@ -298,10 +298,15 @@ function getRandomSubset(array, size, seed) {
 
     return shuffled.slice(min);
 }
-function generateSubset(fcsArrayInput,PlotCellSize,seed){
+function generateSubset(fcsArrayInput,PlotCellSize,SubsetMethod,seed,selectedChannels,allChannels){
     var Plotset
     if (fcsArrayInput.length > PlotCellSize) {
-        Plotset = getRandomSubset(fcsArrayInput, PlotCellSize, seed);
+        if (SubsetMethod = "getRandomSubset"){
+            Plotset = getRandomSubset(fcsArrayInput, PlotCellSize, seed);
+        }else if (SubsetMethod = "getAllMaxSubset"){
+            Plotset = getAllMaxSubset(fcsArrayInput, PlotCellSize, selectedChannels, allChannels);
+        }
+        
     } else if (fcsArrayInput.length == 0){
         console.error('fcsArrayInput is empty');
         customLog('fcsArrayInput is empty');
@@ -312,6 +317,36 @@ function generateSubset(fcsArrayInput,PlotCellSize,seed){
     customLog('Row number of Subset Data:', Plotset.length);
     customLog('Column number of Subset Data:', Plotset[0].length);
     return Plotset
+}
+
+
+function getAllMaxSubset(array, size, selectedChannels, allChannels) {
+    // 准备空的
+    let TopRowIndices = [];
+
+    // 计算每个selectedChannel对应的size
+    let SizeEachChannel = ceil(size / selectedChannels.length);
+
+    // 计算selectedChannels在allChannels中的indices
+    let selectedIndices = selectedChannels.map(channel => allChannels.indexOf(channel));
+
+    // 根据每个indice，在array这个二维array中取对应列，并计算该列中top SizeEachChannel所在的行indices,并加入到TopRowIndices中
+    selectedIndices.forEach(index => {
+        let column = array.map(row => row[index]);
+        let sortedIndices = column.map((value, idx) => [value, idx])
+                                  .sort((a, b) => b[0] - a[0])
+                                  .slice(0, SizeEachChannel)
+                                  .map(item => item[1]);
+        TopRowIndices.push(...sortedIndices);
+    });
+
+    // 去掉TopRowIndices中的重复项
+    TopRowIndices = [...new Set(TopRowIndices)];
+
+    // 取array中TopRowIndices的子集
+    let subset = TopRowIndices.map(rowIndex => array[rowIndex]);
+
+    return subset;
 }
 
 
